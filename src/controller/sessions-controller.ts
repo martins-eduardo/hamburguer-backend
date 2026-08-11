@@ -1,6 +1,9 @@
+import 'dotenv/config'
 import { compareSync, hashSync } from 'bcrypt'
 import type { Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
 import { prisma } from '../db.ts'
+import {} from 
 
 export const signIn = async (req: Request, res: Response) => {
    try {
@@ -19,6 +22,23 @@ export const signIn = async (req: Request, res: Response) => {
       if (!compareSync(password, user.password)) {
          return res.status(401).json({ message: 'Invalid email or password' })
       }
+
+      const userInfos = {
+         id: user.id,
+         name: user.name,
+         email: user.email,
+         cep: user.cep,
+      }
+
+      if(!process.env.JWT_SECRET) {
+         return
+      }
+
+      const token = jwt.sign(userInfos, process.env.JWT_SECRET, )
+
+      res.cookie('user', token, {
+         maxAge: 30 * 1000,
+      })
 
       res.status(200).json({ message: 'Login successful' })
    } catch (error) {
