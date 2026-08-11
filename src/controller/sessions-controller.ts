@@ -3,7 +3,6 @@ import { compareSync, hashSync } from 'bcrypt'
 import type { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../db.ts'
-import {} from 
 
 export const signIn = async (req: Request, res: Response) => {
    try {
@@ -30,11 +29,11 @@ export const signIn = async (req: Request, res: Response) => {
          cep: user.cep,
       }
 
-      if(!process.env.JWT_SECRET) {
+      if (!process.env.JWT_SECRET) {
          return
       }
 
-      const token = jwt.sign(userInfos, process.env.JWT_SECRET, )
+      const token = jwt.sign(userInfos, process.env.JWT_SECRET)
 
       res.cookie('user', token, {
          maxAge: 30 * 1000,
