@@ -27,6 +27,7 @@ export const signIn = async (req: Request, res: Response) => {
          name: user.name,
          email: user.email,
          cep: user.cep,
+         role: user.role,
       }
 
       if (!process.env.JWT_SECRET) {
@@ -92,19 +93,9 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const me = async (req: Request, res: Response) => {
    try {
-      const cookies = req.cookies.user
+      const { user } = req
 
-      if (!process.env.JWT_SECRET) {
-         return
-      }
-
-      const decoded = jwt.verify(cookies, process.env.JWT_SECRET)
-
-      if (!decoded) {
-         return res.status(401).json({ message: 'Unauthorized user' })
-      }
-
-      res.status(200).json(decoded)
+      res.status(200).json(user)
    } catch (error) {
       res.status(500).json({ message: 'Server error:', error })
    }
