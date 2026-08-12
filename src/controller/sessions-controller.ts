@@ -36,7 +36,7 @@ export const signIn = async (req: Request, res: Response) => {
       const token = jwt.sign(userInfos, process.env.JWT_SECRET)
 
       res.cookie('user', token, {
-         maxAge: 30 * 1000,
+         maxAge: 900000,
       })
 
       res.status(200).json({ message: 'Login successful' })
@@ -87,5 +87,39 @@ export const signUp = async (req: Request, res: Response) => {
          message: 'Server error',
          error,
       })
+   }
+}
+
+export const me = async (req: Request, res: Response) => {
+   try {
+      const cookies = req.cookies.user
+
+      if (!process.env.JWT_SECRET) {
+         return
+      }
+
+      const decoded = jwt.verify(cookies, process.env.JWT_SECRET)
+
+      if (!decoded) {
+         return res.status(401).json({ message: 'Unauthorized user' })
+      }
+
+      res.status(200).json(decoded)
+   } catch (error) {
+      res.status(500).json({ message: 'Server error:', error })
+   }
+}
+
+export const logout = async (req: Request, res: Response) => {
+   try {
+      const { user } = req.cookies
+
+      if (user) {
+         res.clearCookie('user')
+      }
+
+      res.status(200).json({ message: 'User logged out' })
+   } catch (error) {
+      res.status(500).json({ message: 'Server error:', error })
    }
 }
