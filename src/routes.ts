@@ -12,4 +12,4 @@ router.get('/me', sessionsMiddleware, me)
 router.post('/logout', sessionsMiddleware, logout)
 
 //Products routes
-router.get("/product", product)
+router.get("/products", product)
