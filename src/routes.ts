@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { logout, me, signIn, signUp } from './controller/sessions-controller.ts'
 import { sessionsMiddleware } from './middlewares/sessions-middleware.ts'
 import { deleteProduct, product } from './controller/product-controller.ts'
+import { cartItems } from './controller/cartItem-controller.ts'
 
 export const router = Router()
 
@@ -14,3 +15,6 @@ router.post('/logout', sessionsMiddleware, logout)
 //Products routes
 router.get("/products", product)
 router.delete("/deleteProduct/:id", deleteProduct)
+
+//Cart routes
+router.get('/cartItems', sessionsMiddleware, cartItems)
