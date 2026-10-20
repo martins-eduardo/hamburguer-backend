@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { logout, me, signIn, signUp } from './controller/sessions-controller.ts'
 import { sessionsMiddleware } from './middlewares/sessions-middleware.ts'
 import { deleteProduct, product } from './controller/product-controller.ts'
-import { cartItems } from './controller/cartItem-controller.ts'
+import { cartItem, cartItems } from './controller/cartItem-controller.ts'
 
 export const router = Router()
 
@@ -18,3 +18,4 @@ router.delete("/deleteProduct/:id", deleteProduct)
 
 //Cart routes
 router.get('/cartItems', sessionsMiddleware, cartItems)
+router.post('/cartItem', sessionsMiddleware, cartItem )
