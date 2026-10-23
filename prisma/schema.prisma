@@ -29,6 +29,7 @@ model User {
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @default(now()) @updatedAt @map("updated_at")
   cartItems CartItem[]
+  order     Order[]
 
   @@map("users")
 }
@@ -41,9 +42,10 @@ model Product {
   image       String
   category    String
 
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @default(now()) @updatedAt @map("updated_at")
-  cartItems CartItem[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @default(now()) @updatedAt @map("updated_at")
+  cartItems  CartItem[]
+  orderItems OrderItem[]
 
   @@map("products")
 }
@@ -58,4 +60,31 @@ model CartItem {
   user      User    @relation(fields: [userId], references: [id])
 
   @@map("cart_item")
+}
+
+model Order {
+  id     String @id @default(uuid())
+  status String @default("pending")
+  total  Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  orderItems OrderItem[]
+
+  @@map("order")
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  quantity Int
+  price    Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+
+  @@map("order_item")
 }
